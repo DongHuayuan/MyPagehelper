@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="tech.six6.dao.CountryDao">
+    <!--数据库表字段和实体类字段对应-->
+    <resultMap id="resultMap" type="Country" autoMapping="true">
+        <id property="id" column="id" javaType="Integer"></id>
+        <result property="countryname" column="countryname" javaType="String"></result>
+        <result property="countrycode" column="countrycode" javaType="String"></result>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        countryname,countrycode
+    </sql>
+
+    <insert id="add" parameterType="Country">
+        insert into country (<include refid="Base_Column_List"></include>)
+          values (#{countryname},#{countrycode})
+    </insert>
+
+    <delete id="delete" parameterType="int">
+        delete from country where id=#{id}
+    </delete>
+
+    <update id="update" parameterType="Country">
+        update country
+        <set>
+            <if test="countryname!=null">
+                `countryname`=#{countryname},
+            </if>
+            <if test="countrycode!=null">
+                countrycode=#{countrycode},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <select id="selectById" parameterType="int" resultMap="resultMap">
+        select * from country where id=#{id}
+    </select>
+
+    <select id="selectAll" resultMap="resultMap">
+        select * from country
+    </select>
+
+    <select id="selectAllPage" resultMap="resultMap">
+        select * from country LIMIT #{pageNum},#{pageSize}
+    </select>
+
+
+    <select id="totalRecords" resultType="Integer">
+        select count(id) from country
+    </select>
+
+
+
+
+</mapper>
